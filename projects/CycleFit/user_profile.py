@@ -1,27 +1,26 @@
-UserData={
-    "name":"Kajal",
-    "age":19,
-    "weight": 68.8,
-    "height": 157,
-    "activity_level":"moderate-4x a week",
-    "recent_period":"28/03/2026",
-    "diet":"Pure veg"
-}
-
-#For each variable i am writing 'em as title format, first letter in uppercase 
 import json
 import os
 from datetime import datetime
 
-def LoadUser():
-    if os.path.exists("data.json"):
-        with open("data.json","r") as f:
-            return json.load(f)
-    return{}
+class user:
+    def __init__(self, Name, Age, Weight, Height, ActivityLevel, RecentPeriod, Diet):
+        self.Name = Name
+        self.Age = Age
+        self.Weight = Weight
+        self.Height = Height
+        self.ActivityLevel = ActivityLevel
+        self.RecentPeriod = RecentPeriod
+        self.Diet = Diet
 
-def SaveUser(User):
-    with open("data.json","w") as f:
-         json.dump(User,f)
-SaveUser(UserData)
-Data=LoadUser()
-print(Data)
+    def SaveUser(self):
+        with open("data.json", "w") as f:
+            json.dump(self.__dict__, f)
+            
+    def LoadUser(self):
+        with open("data.json","r") as f:
+             return json.load(f)
+
+Kajal = user("Kajal", 19, 68.8, 157, "moderate-4x a week", "28/03/2026", "Pure veg")
+Kajal.SaveUser()
+Kajal.LoadUser()
+print(Kajal.LoadUser())
