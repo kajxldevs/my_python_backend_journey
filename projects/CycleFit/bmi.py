@@ -25,6 +25,3 @@ def CalculateBMI(Weight, Height, WeightUnit="kg", HeightUnit="cm"):
 
     return BMI,Category
 
-if __name__ == "__main__":
-    BMI, Category = CalculateBMI(68.8, 157)
-    print(f"BMI: {round(BMI, 1)} — {Category}")
