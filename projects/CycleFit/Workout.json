@@ -1,0 +1,151 @@
+{
+  "Menstrual": {
+    "Theme": "Restore & Ground",
+    "Days": "1-5",
+    "Gym": {
+      "Upper": [
+        "Lat Pulldowns: 3 x 15 (light, slow tempo)",
+        "Seated Cable Rows: 3 x 15 (light)",
+        "Dumbbell Lateral Raises: 3 x 15 (very light)",
+        "Band Pull-Aparts: 3 x 20"
+      ],
+      "Lower": [
+        "Leg Press: 3 x 15 (light)",
+        "Lying Leg Curls: 3 x 20 (light)",
+        "Glute Kickbacks (cable): 3 x 15 each",
+        "Pelvic Tilts & Bird-Dogs: 3 x 10 each"
+      ]
+    },
+    "Home": {
+      "Upper": [
+        "Wall Push-ups: 3 x 20",
+        "Floor I-Y-T Raises (lying on stomach): 3 x 10 each",
+        "Resistance Band Rows (anchored to door): 3 x 20",
+        "Cat-Cow stretches: 2 min"
+      ],
+      "Lower": [
+        "Bodyweight Squats (slow, deep): 3 x 15",
+        "Glute Bridges (feet on floor): 3 x 20",
+        "Clamshells (with booty band): 3 x 20 each side",
+        "Child's Pose to Downward Dog flow: 5 rounds"
+      ]
+    },
+    "Yoga": [
+      "Cat-Cow + Child's Pose flow – 5 slow rounds",
+      "Supta Baddha Konasana (Reclining Bound Angle) – soles together, knees dropped with pillows. Hold 3-5 min.",
+      "Bhramari Pranayama (Humming Bee Breath) – 9-11 rounds."
+    ]
+  },
+  "Follicular": {
+    "Theme": "Build & Grow",
+    "Days": "6-13",
+    "Gym": {
+      "Upper": [
+        "Barbell Bench Press: 4 x 8-10",
+        "Dumbbell Shoulder Press: 4 x 10-12",
+        "Bent-Over Barbell Rows: 4 x 10",
+        "Cable Crossovers: 3 x 15"
+      ],
+      "Lower": [
+        "Barbell Back Squats: 4 x 8-10",
+        "Romanian Deadlifts (RDLs): 4 x 10-12",
+        "Walking Dumbbell Lunges: 3 x 10 per leg",
+        "Leg Press (heavy): 3 x 12"
+      ]
+    },
+    "Home": {
+      "Upper": [
+        "Decline Push-ups (feet elevated): 4 x 10-12",
+        "Pike Push-ups (for shoulders): 4 x 10",
+        "Single-Arm Rows (dumbbell/heavy backpack): 4 x 10 each",
+        "Tricep Dips (off chair): 3 x 15"
+      ],
+      "Lower": [
+        "Goblet Squats (hold dumbbell/heavy object): 4 x 10",
+        "Single-Leg RDLs (hold dumbbells): 4 x 10 each",
+        "Bulgarian Split Squats (rear foot on chair): 3 x 10 each",
+        "Jump Squats (explosive): 3 x 15"
+      ]
+    },
+    "Yoga": [
+      "Surya Namaskar (Sun Salutations) – 5-10 rounds.",
+      "Wild Thing (Camatkarasana) – Hold 3 breaths each side.",
+      "Gentle forward fold + seated twist – 5 min."
+    ]
+  },
+  "Ovulation": {
+    "Theme": "Peak & Shine",
+    "Days": "14-16",
+    "Gym": {
+      "Upper": [
+        "Heavy Barbell Overhead Press: 5 x 3-5",
+        "Heavy Weighted Pull-ups (or Lat Pulldowns): 5 x 5",
+        "Incline Dumbbell Press: 4 x 6-8",
+        "Face Pulls: 3 x 15"
+      ],
+      "Lower": [
+        "Barbell Hip Thrusts: 5 x 5 (HEAVY)",
+        "Trap Bar Deadlifts: 5 x 3-5",
+        "Hack Squats: 4 x 6-8",
+        "Sled Pushes: 4 x 20 yards"
+      ]
+    },
+    "Home": {
+      "Upper": [
+        "Weighted Push-ups (plate/backpack on back): 5 x 5",
+        "Single-Arm Renegade Rows (in plank): 4 x 6 each",
+        "Handstand Push-ups (wall) or Pike Push-ups: 4 x 5",
+        "Heavy Band Overhead Press: 4 x 8"
+      ],
+      "Lower": [
+        "Pistol Squat Progressions (or weighted step-ups): 5 x 5 each",
+        "Dumbbell Sumo Squats (heavy): 5 x 6",
+        "Bicycle Crunches: 4 x 20",
+        "Broad Jumps (standing long jumps): 4 x 5"
+      ]
+    },
+    "Yoga": [
+      "Dynamic Surya Namaskar (fast-paced) – 5 rounds.",
+      "Ustrasana (Camel Pose) – Hold 3-5 breaths.",
+      "Kapalabhati (Skull Shining Breath) – 3 rounds of 30 rapid sharp exhales.",
+      "Child's Pose + gentle seated forward fold – 5 min."
+    ]
+  },
+  "Luteal": {
+    "Theme": "Focus & Wind Down",
+    "Days": "17-28",
+    "Gym": {
+      "Upper": [
+        "Dumbbell Chest Press (drop sets): 4 x 12, 10, 8",
+        "Seated Cable Rows (drop sets): 4 x 15, 12, 10",
+        "Dumbbell Upright Rows: 3 x 15",
+        "Tricep Rope Pushdowns: 3 x 20"
+      ],
+      "Lower": [
+        "Smith Machine Squats (high reps): 4 x 15",
+        "Lying Leg Curls (drop set): 4 x 15, 12, 10",
+        "Dumbbell Step-ups: 3 x 12 each",
+        "Cable Pull-Throughs: 3 x 20"
+      ]
+    },
+    "Home": {
+      "Upper": [
+        "Diamond Push-ups: 4 x 15",
+        "Wide-Grip Push-ups: 4 x 15",
+        "Band Pull-Aparts + Band Press combo (superset): 3 x 20 each",
+        "Plank Shoulder Taps: 3 x 30 seconds"
+      ],
+      "Lower": [
+        "Sumo Goblet Squats (hold weight, go deep): 4 x 15",
+        "Donkey Kicks (with ankle weights/band): 4 x 20 each",
+        "Fire Hydrants: 4 x 20 each",
+        "Wall Sit (hold weight on lap): 3 x 45 seconds"
+      ]
+    },
+    "Yoga": [
+      "Gentle Cat-Cow + standing side stretches – 5 min.",
+      "Malasana (Garland Pose/Yoga Squat) – Hold 1-2 min.",
+      "Chandra Bhedana (Left Nostril Breathing) – 9-11 rounds."
+    ]
+  }
+}
