@@ -43,7 +43,3 @@ def Login(Username, Password):
 
     return "Username not found!"
 
-if __name__ == "__main__":
-    print(Signup("Kajal", "kajal123"))
-    print(Login("Kajal", "kajal123"))
-    print(Login("Kajal", "wrongpassword"))

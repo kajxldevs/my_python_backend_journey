@@ -17,6 +17,3 @@ def  Phase(Perioddate):
 
     return(Current,Phase)
 
-if __name__ == "__main__":
-    CycleDay, Phase = Phase("28/03/2026")
-    print(f"Cycle Day: {CycleDay} — Phase: {Phase}")
