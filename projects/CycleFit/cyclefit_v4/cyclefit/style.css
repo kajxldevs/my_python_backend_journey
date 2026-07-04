@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #191919;
+  --bg-card: #222222;
+  --bg-nav: #111111;
+  --bg-input: #2a2a2a;
+  --text: #F5F5F5;
+  --subtext: #A0A0A0;
+  --border: #444444;
+  --accent-red: #750E21;
+  --accent-orange: #E3651D;
+  --accent-green: #BED754;
+}
+
+[data-theme="light"] {
+  --bg: #F5F5F5;
+  --bg-card: #E8E8E8;
+  --bg-nav: #FFFFFF;
+  --bg-input: #FFFFFF;
+  --text: #191919;
+  --subtext: #555555;
+  --border: #CCCCCC;
+}
+
+[data-theme="warm"] {
+  --bg: #1a1208;
+  --bg-card: #231808;
+  --bg-nav: #110e05;
+  --bg-input: #2a1f0e;
+  --text: #E8D5B0;
+  --subtext: #A08060;
+  --border: #4a3820;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: 0 !important;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', serif;
+  line-height: 1.2;
+}
+
+a {
+  color: var(--accent-orange);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* NAV */
+nav {
+  background: var(--bg-nav);
+  padding: 1.2rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.nav-icon {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  transition: color 0.2s ease;
+}
+
+.nav-icon:hover {
+  color: var(--accent-orange);
+}
+
+/* BUTTONS */
+.btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent-red);
+  color: #F5F5F5;
+}
+
+.btn-primary:hover {
+  background: #8a1027;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border: 1.5px solid var(--text);
+}
+
+.btn-outline:hover {
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+}
+
+.btn-full {
+  width: 100%;
+  text-align: center;
+}
+
+/* CARDS */
+.card {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent-red);
+  padding: 1.8rem;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--subtext);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+/* FORMS */
+.form-group {
+  margin-bottom: 1.4rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--subtext);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--accent-orange);
+}
+
+.form-input::placeholder {
+  color: var(--subtext);
+}
+
+/* DIVIDER */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* SECTION */
+.section {
+  padding: 5rem 0;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--accent-orange);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — CycleFit</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .settings-page {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .settings-page h1 {
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .settings-block {
+      border-left: 3px solid var(--accent-red);
+      padding: 2rem;
+      background: var(--bg-card);
+      margin-bottom: 1px;
+      transition: transform 0.2s ease;
+    }
+
+    .settings-block:hover {
+      transform: translateY(-2px);
+    }
+
+    .settings-block h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* THEME BUTTONS */
+    .theme-options {
+      display: flex;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .theme-btn {
+      flex: 1;
+      padding: 0.9rem 1rem;
+      background: var(--bg);
+      color: var(--subtext);
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .theme-btn:hover {
+      transform: translateY(-2px);
+      color: var(--text);
+    }
+
+    .theme-btn.active {
+      background: var(--accent-red);
+      color: #F5F5F5;
+    }
+
+    /* PROFILE ROWS */
+    .profile-rows {
+      list-style: none;
+    }
+
+    .profile-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-row:last-child { border-bottom: none; }
+
+    .profile-row-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--subtext);
+      text-transform: uppercase;
+    }
+
+    .profile-row-value {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .edit-btn {
+      margin-top: 1.5rem;
+    }
+
+    /* ACCOUNT */
+    .logout-btn {
+      margin-top: 0;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 3rem;
+      font-size: 0.85rem;
+      color: var(--subtext);
+      text-align: center;
+      transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--text);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">CycleFit</a>
+    <a href="dashboard.html" style="color:var(--subtext); font-size:0.85rem; text-decoration:none;">Dashboard</a>
+  </nav>
+
+  <div class="settings-page">
+    <h1>Settings</h1>
+
+    <!-- THEME -->
+    <div class="settings-block">
+      <h2>Theme</h2>
+      <div class="theme-options">
+        <button class="theme-btn active" onclick="setTheme('dark', this)">Dark</button>
+        <button class="theme-btn" onclick="setTheme('light', this)">Light</button>
+        <button class="theme-btn" onclick="setTheme('warm', this)">Warm</button>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="settings-block">
+      <h2>Profile</h2>
+      <ul class="profile-rows" id="profile-rows">
+        <li class="profile-row">
+          <span class="profile-row-label">Name</span>
+          <span class="profile-row-value" id="p-name">—</span>
+        </li>
+        <li class="profile-row">
+          <span class="profile-row-label">Age</span>
+          <span class="profile-row-value" id="p-age">—</span>
+        </li>
+        <li class="profile-row">
+          <span class="profile-row-label">Weight</span>
+          <span class="profile-row-value" id="p-weight">—</span>
+        </li>
+        <li class="profile-row">
+          <span class="profile-row-label">Height</span>
+          <span class="profile-row-value" id="p-height">—</span>
+        </li>
+        <li class="profile-row">
+          <span class="profile-row-label">Activity Level</span>
+          <span class="profile-row-value" id="p-activity">—</span>
+        </li>
+        <li class="profile-row">
+          <span class="profile-row-label">Last Period</span>
+          <span class="profile-row-value" id="p-period">—</span>
+        </li>
+        <li class="profile-row">
+          <span class="profile-row-label">Diet</span>
+          <span class="profile-row-value" id="p-diet">—</span>
+        </li>
+      </ul>
+      <button class="btn btn-outline edit-btn" onclick="window.location.href='signup.html'">Edit Profile</button>
+    </div>
+
+    <!-- ACCOUNT -->
+    <div class="settings-block">
+      <h2>Account</h2>
+      <button class="btn btn-outline logout-btn" onclick="logout()">Log Out</button>
+    </div>
+
+    <a href="dashboard.html" class="back-link">Back to Dashboard</a>
+  </div>
+
+  <script>
+    function setTheme(theme, btn) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      localStorage.setItem('cf_theme', theme);
+    }
+
+    function logout() {
+      localStorage.removeItem('cf_user');
+      localStorage.removeItem('cf_mood_today');
+      window.location.href = 'index.html';
+    }
+
+    function loadProfile() {
+      const profile = JSON.parse(localStorage.getItem('cf_profile') || '{}');
+      document.getElementById('p-name').textContent = profile.name || '—';
+      document.getElementById('p-age').textContent = profile.age ? `${profile.age} years` : '—';
+      document.getElementById('p-weight').textContent = profile.weight ? `${profile.weight} kg` : '—';
+      document.getElementById('p-height').textContent = profile.height ? `${profile.height} cm` : '—';
+      document.getElementById('p-activity').textContent = profile.activity || '—';
+      document.getElementById('p-period').textContent = profile.period || '—';
+      document.getElementById('p-diet').textContent = profile.diet || '—';
+    }
+
+    // Apply saved theme
+    const savedTheme = localStorage.getItem('cf_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      if (btn.textContent.toLowerCase() === savedTheme) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+
+    loadProfile();
+  </script>
+
+</body>
+</html>

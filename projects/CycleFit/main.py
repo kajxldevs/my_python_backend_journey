@@ -6,7 +6,7 @@ from mood import GetTodayMood, SaveMood
 from auth import Login, Signup
 
 def main():
-    print("\nWelcome to CycleFit 💪\n")
+    print("\nWelcome to CycleFit \n")
     Choice = input("1. Login  2. Signup: ")
     
     if Choice == "2":
@@ -42,12 +42,12 @@ def main():
     BodyPart = input("Upper or Lower?: ").capitalize()
     Plan = GetPlan(Phase, Equipment, BodyPart)
 
-    print(f"\n🏋️ Your {Phase} Phase — {Equipment} {BodyPart} Workout:\n")
+    print(f"\n Your {Phase} Phase — {Equipment} {BodyPart} Workout:\n")
     for Exercise in Plan:
         print(f"  ✅ {Exercise}")
 
     if Energy <= 4:
-        print("\n⚠️ Energy is low today — consider lighter weights and listen to your body!")
+        print("\n Energy is low today — consider lighter weights and listen to your body!")
 
 if __name__ == "__main__":
     main()

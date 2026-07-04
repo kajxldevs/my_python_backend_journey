@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — CycleFit</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="api.js"></script>
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    .auth-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 65px);
+    }
+    .auth-left {
+      background: #111111;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 3rem;
+      border-right: 3px solid var(--accent-red);
+      position: relative;
+    }
+    .auth-left-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 2rem;
+    }
+    .auth-left-quote em { font-style: italic; color: var(--accent-orange); }
+    .auth-left-sub { font-size: 0.9rem; color: var(--subtext); line-height: 1.7; }
+    .auth-left-accent {
+      position: absolute;
+      bottom: 3rem;
+      left: 3rem;
+      width: 40px;
+      height: 3px;
+      background: var(--accent-red);
+    }
+    .auth-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 3rem;
+      background: var(--bg);
+    }
+    .auth-right h2 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .auth-sub { color: var(--subtext); margin-bottom: 2.5rem; font-size: 0.95rem; }
+    .auth-footer-text { margin-top: 1.5rem; font-size: 0.9rem; color: var(--subtext); text-align: center; }
+    .error-msg { color: var(--accent-red); font-size: 0.85rem; margin-bottom: 1rem; display: none; }
+    .success-msg { color: var(--accent-green); font-size: 0.85rem; margin-bottom: 1rem; display: none; }
+    @media (max-width: 768px) {
+      .auth-layout { grid-template-columns: 1fr; }
+      .auth-left { display: none; }
+      .auth-right { padding: 3rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">CycleFit</a>
+  </nav>
+
+  <div class="auth-layout">
+    <div class="auth-left">
+      <p class="auth-left-quote">Train with your cycle.<br><em>Not against it.</em></p>
+      <p class="auth-left-sub">Your training plan changes every week — because your body does too.</p>
+      <div class="auth-left-accent"></div>
+    </div>
+
+    <div class="auth-right">
+      <h2>Welcome back</h2>
+      <p class="auth-sub">Log in to continue your cycle-aware training.</p>
+
+      <div class="error-msg" id="error-msg"></div>
+      <div class="success-msg" id="success-msg"></div>
+
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input class="form-input" type="text" id="username" placeholder="Your username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="password" placeholder="Your password">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="handleLogin()">Login</button>
+
+      <p class="auth-footer-text">New here? <a href="signup.html">Sign up</a></p>
+    </div>
+  </div>
+
+  <script>
+    async function handleLogin() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorEl = document.getElementById('error-msg');
+      const successEl = document.getElementById('success-msg');
+
+      if (!username || !password) {
+        errorEl.textContent = 'Please fill in all fields.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      try {
+        const data = await apiLogin(username, password);
+        if (data.message === 'Login successful!') {
+          successEl.textContent = 'Login successful! Redirecting...';
+          successEl.style.display = 'block';
+          errorEl.style.display = 'none';
+          localStorage.setItem('cf_user', username);
+          setTimeout(() => window.location.href = 'mood.html', 800);
+        } else {
+          errorEl.textContent = data.message;
+          errorEl.style.display = 'block';
+          successEl.style.display = 'none';
+        }
+      } catch (err) {
+        errorEl.textContent = 'Cannot connect to server. Make sure the API is running.';
+        errorEl.style.display = 'block';
+      }
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — CycleFit</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="api.js"></script>
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    .auth-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 65px);
+    }
+    .auth-left {
+      background: #111111;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 3rem;
+      border-right: 3px solid var(--accent-red);
+      position: relative;
+    }
+    .auth-left-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 2rem;
+    }
+    .auth-left-quote em { font-style: italic; color: var(--accent-orange); }
+    .auth-left-sub { font-size: 0.9rem; color: var(--subtext); line-height: 1.7; }
+    .auth-left-accent {
+      position: absolute;
+      bottom: 3rem;
+      left: 3rem;
+      width: 40px;
+      height: 3px;
+      background: var(--accent-red);
+    }
+    .auth-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 3rem;
+      background: var(--bg);
+      overflow-y: auto;
+    }
+    .auth-right h2 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .auth-sub { color: var(--subtext); margin-bottom: 2.5rem; font-size: 0.95rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .auth-footer-text { margin-top: 1.5rem; font-size: 0.9rem; color: var(--subtext); text-align: center; }
+    .error-msg { color: var(--accent-red); font-size: 0.85rem; margin-bottom: 1rem; display: none; }
+    .success-msg { color: var(--accent-green); font-size: 0.85rem; margin-bottom: 1rem; display: none; }
+    @media (max-width: 768px) {
+      .auth-layout { grid-template-columns: 1fr; }
+      .auth-left { display: none; }
+      .auth-right { padding: 2rem 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">CycleFit</a>
+  </nav>
+
+  <div class="auth-layout">
+    <div class="auth-left">
+      <p class="auth-left-quote">Your cycle<br>is data.<br><em>Use it.</em></p>
+      <p class="auth-left-sub">Tell us about yourself so we can build a plan that moves with your biology, not against it.</p>
+      <div class="auth-left-accent"></div>
+    </div>
+
+    <div class="auth-right">
+      <h2>Create your account</h2>
+      <p class="auth-sub">Tell us about yourself so we can personalize your training.</p>
+
+      <div class="error-msg" id="error-msg"></div>
+      <div class="success-msg" id="success-msg"></div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input class="form-input" type="text" id="name" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input class="form-input" type="number" id="age" placeholder="e.g. 22" min="13" max="80">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Weight (kg)</label>
+          <input class="form-input" type="number" id="weight" placeholder="e.g. 62" step="0.1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Height (cm)</label>
+          <input class="form-input" type="number" id="height" placeholder="e.g. 165">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Activity Level</label>
+        <select class="form-select" id="activity">
+          <option value="" disabled selected>Select your activity level</option>
+          <option value="sedentary">Sedentary</option>
+          <option value="light">Light — 1 to 2 days/week</option>
+          <option value="moderate">Moderate — 3 to 4 days/week</option>
+          <option value="active">Active — 5+ days/week</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Last Period Date</label>
+        <input class="form-input" type="date" id="period">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Diet</label>
+        <select class="form-select" id="diet">
+          <option value="" disabled selected>Select your diet</option>
+          <option value="veg">Vegetarian</option>
+          <option value="nonveg">Non-vegetarian</option>
+          <option value="vegan">Vegan</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input class="form-input" type="text" id="username" placeholder="Choose a username">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="password" placeholder="Choose a password">
+      </div>
+
+      <button class="btn btn-primary btn-full" onclick="handleSignup()">Create Account</button>
+      <p class="auth-footer-text">Already have an account? <a href="login.html">Login</a></p>
+    </div>
+  </div>
+
+  <script>
+    let isEditMode = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const profile = JSON.parse(localStorage.getItem('cf_profile') || '{}');
+      if (profile.name) {
+        isEditMode = true;
+        document.getElementById('name').value = profile.name;
+        document.getElementById('age').value = profile.age;
+        document.getElementById('weight').value = profile.weight;
+        document.getElementById('height').value = profile.height;
+        document.getElementById('activity').value = profile.activity;
+        document.getElementById('period').value = profile.period;
+        document.getElementById('diet').value = profile.diet;
+        document.getElementById('username').value = profile.username;
+        // Hide password field when editing
+        document.getElementById('password').closest('.form-group').style.display = 'none';
+        document.querySelector('h2').textContent = 'Edit your profile';
+        document.querySelector('.auth-sub').textContent = 'Update your details below.';
+        document.querySelector('button').textContent = 'Save Changes';
+      }
+    });
+
+    async function handleSignup() {
+      const name = document.getElementById('name').value.trim();
+      const age = document.getElementById('age').value;
+      const weight = document.getElementById('weight').value;
+      const height = document.getElementById('height').value;
+      const activity = document.getElementById('activity').value;
+      const period = document.getElementById('period').value;
+      const diet = document.getElementById('diet').value;
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      const errorEl = document.getElementById('error-msg');
+      const successEl = document.getElementById('success-msg');
+
+      if (!name || !age || !weight || !height || !activity || !period || !diet || !username) {
+        errorEl.textContent = 'Please fill in all fields.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      if (!isEditMode && !password) {
+        errorEl.textContent = 'Please enter a password.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      try {
+        if (isEditMode) {
+          // Just update localStorage, no new account needed
+          const profile = { name, age, weight, height, activity, period, diet, username };
+          localStorage.setItem('cf_profile', JSON.stringify(profile));
+          successEl.textContent = 'Profile updated! Redirecting...';
+          successEl.style.display = 'block';
+          errorEl.style.display = 'none';
+          setTimeout(() => window.location.href = 'dashboard.html', 800);
+        } else {
+          const authData = await apiSignup(username, password);
+          if (authData.message !== 'Signup successful!') {
+            errorEl.textContent = authData.message;
+            errorEl.style.display = 'block';
+            return;
+          }
+          const profile = { name, age, weight, height, activity, period, diet, username };
+          localStorage.setItem('cf_profile', JSON.stringify(profile));
+          localStorage.setItem('cf_user', username);
+          successEl.textContent = 'Account created! Redirecting...';
+          successEl.style.display = 'block';
+          errorEl.style.display = 'none';
+          setTimeout(() => window.location.href = 'mood.html', 800);
+        }
+      } catch (err) {
+        errorEl.textContent = 'Cannot connect to server. Make sure the API is running.';
+        errorEl.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

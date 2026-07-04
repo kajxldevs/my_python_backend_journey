@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — CycleFit</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="api.js"></script>
+  <style>
+    .dashboard-page { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+    .dashboard-header { margin-bottom: 2.5rem; }
+    .greeting { font-size: 0.85rem; color: var(--subtext); margin-bottom: 0.3rem; }
+    .dashboard-header h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); }
+    .dashboard-header h1 span { color: var(--accent-orange); font-style: italic; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin-bottom: 3rem;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      padding: 2rem 1.8rem;
+      border-left: 3px solid var(--accent-red);
+      transition: transform 0.2s ease;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 0.3rem;
+    }
+    .stat-sub { font-size: 0.85rem; color: var(--subtext); }
+    .stat-note {
+      font-size: 0.75rem;
+      color: var(--subtext);
+      margin-top: 0.8rem;
+      line-height: 1.5;
+      border-top: 1px solid var(--border);
+      padding-top: 0.8rem;
+    }
+    .phase-menstrual { color: #750E21; }
+    .phase-follicular { color: #E3651D; }
+    .phase-ovulatory { color: #BED754; }
+    .phase-luteal { color: #A0A0A0; }
+    .workout-section {
+      background: var(--bg-card);
+      border-left: 3px solid var(--accent-red);
+      padding: 2rem 2rem 2.5rem;
+    }
+    .workout-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .workout-header h2 { font-size: 1.6rem; }
+    .workout-meta { font-size: 0.85rem; color: var(--subtext); margin-top: 0.3rem; }
+    .equipment-toggle { display: flex; gap: 1px; background: var(--border); }
+    .toggle-btn {
+      padding: 0.5rem 1.2rem;
+      background: var(--bg);
+      color: var(--subtext);
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .toggle-btn.active { background: var(--accent-red); color: #F5F5F5; }
+    .toggle-btn:hover:not(.active) { background: var(--bg-input); color: var(--text); }
+    .body-toggle { display: flex; gap: 1rem; margin-bottom: 2rem; }
+    .body-btn {
+      padding: 0.4rem 1rem;
+      background: transparent;
+      color: var(--subtext);
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+    }
+    .body-btn.active { border-color: var(--accent-orange); color: var(--accent-orange); }
+    .low-energy-banner {
+      border: 1.5px solid var(--accent-orange);
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--accent-orange);
+      display: none;
+    }
+    .exercise-list { list-style: none; padding: 0; }
+    .exercise-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .exercise-item:last-child { border-bottom: none; }
+    .exercise-check {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border);
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .exercise-check.checked { background: var(--accent-red); border-color: var(--accent-red); }
+    .exercise-check.checked::after {
+      content: '';
+      width: 8px;
+      height: 5px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(-45deg) translateY(-1px);
+      display: block;
+    }
+    .exercise-text { font-size: 0.95rem; line-height: 1.5; color: var(--text); transition: color 0.2s ease; }
+    .exercise-item.done .exercise-text { color: var(--subtext); }
+    .loading { color: var(--subtext); font-size: 0.9rem; padding: 1rem 0; }
+    @media (max-width: 700px) { .stats-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">CycleFit</a>
+    <a href="settings.html" class="nav-icon" title="Settings">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06-.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </a>
+  </nav>
+
+  <div class="dashboard-page">
+    <div class="dashboard-header">
+      <p class="greeting" id="greeting">Good morning</p>
+      <h1>Today is <span id="phase-display">—</span> phase.</h1>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <p class="card-label">Current Cycle Phase</p>
+        <p class="stat-value" id="phase-value">Loading...</p>
+        <p class="stat-sub" id="phase-day">—</p>
+      </div>
+      <div class="stat-card">
+        <p class="card-label">BMI</p>
+        <p class="stat-value" id="bmi-value">—</p>
+        <p class="stat-sub" id="bmi-category">—</p>
+        <p class="stat-note">BMI is one metric, not a measure of your worth.</p>
+      </div>
+      <div class="stat-card">
+        <p class="card-label">Today's Mood</p>
+        <p class="stat-value" id="mood-value">—</p>
+        <p class="stat-sub" id="energy-value">Energy: — / 10</p>
+      </div>
+    </div>
+
+    <div class="workout-section">
+      <div class="workout-header">
+        <div>
+          <h2>Today's Workout</h2>
+          <p class="workout-meta" id="workout-meta">—</p>
+        </div>
+        <div class="equipment-toggle">
+          <button class="toggle-btn active" onclick="switchEquipment('Gym', this)">Gym</button>
+          <button class="toggle-btn" onclick="switchEquipment('Home', this)">Home</button>
+        </div>
+      </div>
+
+      <div class="body-toggle">
+        <button class="body-btn active" onclick="switchBody('Upper', this)">Upper Body</button>
+        <button class="body-btn" onclick="switchBody('Lower', this)">Lower Body</button>
+      </div>
+
+      <div class="low-energy-banner" id="low-energy-banner">
+        Energy is low today. Consider lighter weights and listen to your body.
+      </div>
+
+      <ul class="exercise-list" id="exercise-list">
+        <li class="loading">Loading your workout...</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let currentPhase = 'Follicular';
+    let currentEquipment = 'Gym';
+    let currentBody = 'Upper';
+    let currentEnergy = 5;
+
+    function phaseColorClass(phase) {
+      const map = {
+        Menstrual: 'phase-menstrual',
+        Follicular: 'phase-follicular',
+        Ovulation: 'phase-ovulatory',
+        Luteal: 'phase-luteal'
+      };
+      return map[phase] || '';
+    }
+
+    async function loadWorkout() {
+      const list = document.getElementById('exercise-list');
+      list.innerHTML = '<li class="loading">Loading...</li>';
+      try {
+        const data = await apiWorkout(currentPhase, currentEquipment, currentBody);
+        const exercises = data.exercises || [];
+        if (!exercises.length) {
+          list.innerHTML = '<li class="loading">No exercises found.</li>';
+          return;
+        }
+        list.innerHTML = exercises.map(ex => `
+          <li class="exercise-item" onclick="toggleExercise(this)">
+            <div class="exercise-check"></div>
+            <span class="exercise-text">${ex}</span>
+          </li>
+        `).join('');
+      } catch (err) {
+        list.innerHTML = '<li class="loading">Could not load workout. Is the API running?</li>';
+      }
+    }
+
+    function toggleExercise(item) {
+      item.classList.toggle('done');
+      item.querySelector('.exercise-check').classList.toggle('checked');
+    }
+
+    function switchEquipment(eq, btn) {
+      currentEquipment = eq;
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadWorkout();
+    }
+
+    function switchBody(body, btn) {
+      currentBody = body;
+      document.querySelectorAll('.body-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadWorkout();
+    }
+
+    function setGreeting() {
+      const h = new Date().getHours();
+      const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+      const profile = JSON.parse(localStorage.getItem('cf_profile') || '{}');
+      document.getElementById('greeting').textContent = profile.name ? `${greet}, ${profile.name}` : greet;
+    }
+
+    async function init() {
+      setGreeting();
+
+      const profile = JSON.parse(localStorage.getItem('cf_profile') || '{}');
+      const mood = JSON.parse(localStorage.getItem('cf_mood_today') || '{}');
+
+      // Mood
+      currentEnergy = mood.energy || 5;
+      document.getElementById('mood-value').textContent = mood.mood || '—';
+      document.getElementById('energy-value').textContent = `Energy: ${mood.energy || '—'} / 10`;
+
+      if (currentEnergy <= 4) {
+        document.getElementById('low-energy-banner').style.display = 'block';
+      }
+
+      // BMI from API
+      if (profile.weight && profile.height) {
+        try {
+          const bmiData = await apiBMI(profile.weight, profile.height);
+          document.getElementById('bmi-value').textContent = bmiData.bmi;
+          document.getElementById('bmi-category').textContent = bmiData.category;
+        } catch {
+          document.getElementById('bmi-value').textContent = '—';
+        }
+      }
+
+      // Cycle phase from API
+      if (profile.period) {
+        try {
+          const cycleData = await apiCycle(profile.period);
+          currentPhase = cycleData.phase;
+          const phaseEl = document.getElementById('phase-value');
+          phaseEl.textContent = cycleData.phase;
+          phaseEl.className = `stat-value ${phaseColorClass(cycleData.phase)}`;
+          document.getElementById('phase-day').textContent = `Day ${cycleData.day}`;
+          const displayEl = document.getElementById('phase-display');
+          displayEl.textContent = cycleData.phase;
+          displayEl.className = phaseColorClass(cycleData.phase);
+          document.getElementById('workout-meta').textContent = `${cycleData.phase} Phase — based on your cycle`;
+        } catch {
+          document.getElementById('phase-value').textContent = 'API offline';
+        }
+      }
+
+      loadWorkout();
+    }
+
+    init();
+  </script>
+</body>
+</html>
